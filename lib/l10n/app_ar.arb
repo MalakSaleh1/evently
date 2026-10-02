@@ -1,0 +1,20 @@
+{
+  "personalizeExperience": "تخصيص تجربتك",
+  "onboardingDescription": "اختر لغتك وستايلك المفضل للبدء بتجربة مريحة ومخصصة تناسب ذوقك.",
+  "language": "اللغة",
+  "theme": "المظهر",
+  "letsStart": "هيا بنا نبدأ",
+  "loginToYourAccount": "تسجيل الدخول إلى حسابك",
+  "enterYourEmail": "أدخل البريد الإلكتروني",
+  "enterYourPassword": "أدخل كلمة المرور",
+  "forgetPassword": "هل نسيت كلمة المرور؟",
+  "login": "تسجيل الدخول",
+  "dontHaveAnAccount": "ليس لديك حساب؟",
+  "signup": "إنشاء حساب",
+  "resetPasswordButton": "إعادة تعيين كلمة المرور",
+  "createYourAccount": "إنشاء حسابك",
+  "enterYourName": "أدخل الاسم",
+  "confirmYourPassword": "تأكيد كلمة المرور",
+  "signUpButton": "إنشاء حساب",
+  "alreadyHaveAnAccount": "لديك حساب بالفعل؟"
+}

@@ -1,0 +1,20 @@
+{
+  "personalizeExperience": "Personalize Your Experience",
+  "onboardingDescription": "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.",
+  "language": "Language",
+  "theme": "Theme",
+  "letsStart": "Let’s start",
+  "loginToYourAccount": "Login to your account",
+  "enterYourEmail": "Enter your Email",
+  "enterYourPassword": "Enter your Password",
+  "forgetPassword": "Forget Password?",
+  "login": "Login",
+  "dontHaveAnAccount": "Don’t have an account ?",
+  "signup": "Signup",
+  "resetPasswordButton": "Reset password",
+  "createYourAccount": "Create your account",
+  "enterYourName": "Enter your Name",
+  "confirmYourPassword": "Confirm your Password",
+  "signUpButton": "Sign Up",
+  "alreadyHaveAnAccount": "Already have an account ?"
+}
