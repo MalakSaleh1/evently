@@ -3,7 +3,6 @@ import 'package:evently/core/app_colors.dart';
 import 'package:evently/core/app_provider/app_provider.dart';
 import 'package:evently/l10n/app_localizations.dart';
 import 'package:evently/modules/auth/login_screen.dart';
-import 'package:evently/widgets/select_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,16 +14,36 @@ class Onboarding extends StatefulWidget {
 }
 
 class _OnboardingState extends State<Onboarding> {
+  static const int _pagesCount = 3;
 
-  bool get _isLast => _currentPage == screenDetails.length - 1;
+  final PageController pageController = PageController();
+  int _currentPage = 0;
 
+  bool get _isLast => _currentPage == _pagesCount - 1;
+
+  @override
   void dispose() {
     pageController.dispose();
     super.dispose();
   }
 
-  PageController pageController=PageController();
-  int _currentPage = 0;
+  List<Map<String, String>> _getScreenDetails(AppLocalizations locale) => [
+    {
+      "image": "assets/images/onboarding/hot-trending.png",
+      "title": locale.onboardingTitle1,
+      "desc": locale.onboardingDesc1,
+    },
+    {
+      "image": "assets/images/onboarding/being-creative.png",
+      "title": locale.onboardingTitle2,
+      "desc": locale.onboardingDesc2,
+    },
+    {
+      "image": "assets/images/onboarding/being-creative-1.png",
+      "title": locale.onboardingTitle3,
+      "desc": locale.onboardingDesc3,
+    },
+  ];
 
   void _onNext() {
     if (_isLast) {
@@ -40,28 +59,24 @@ class _OnboardingState extends State<Onboarding> {
     }
   }
 
-  List<Map<String,dynamic>> screenDetails=[
-    {
-      "image":"assets/images/onboarding/hot-trending.png",
-      "title":"Find Events That Inspire You",
-      "desc":"Dive into a world of events crafted to fit your unique interests. Whether you're into live music, art workshops, professional networking, or simply discovering new experiences, we have something for everyone. Our curated recommendations will help you explore, connect, and make the most of every opportunity around you."
-    },{
-      "image":"assets/images/onboarding/being-creative.png",
-      "title":"Effortless Event Planning",
-      "desc":"Take the hassle out of organizing events with our all-in-one planning tools. From setting up invites and managing RSVPs to scheduling reminders and coordinating details, we’ve got you covered. Plan with ease and focus on what matters – creating an unforgettable experience for you and your guests."
-    },{
-      "image":"assets/images/onboarding/being-creative-1.png",
-      "title":"Connect with Friends & Share Moments",
-      "desc":"Make every event memorable by sharing the experience with others. Our platform lets you invite friends, keep everyone in the loop, and celebrate moments together. Capture and share the excitement with your network, so you can relive the highlights and cherish the memories."
-    }
-  ];
-
+  void _onBack() {
+    pageController.previousPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     var provider = Provider.of<AppProvider>(context);
     ThemeData theme = Theme.of(context);
     var locale = AppLocalizations.of(context)!;
+    final screenDetails = _getScreenDetails(locale);
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final Color accentColor = provider.themeMode == ThemeMode.light
+        ? AppColors.lightPrimaryColor
+        : AppColors.white;
 
     return Scaffold(
       body: Padding(
@@ -73,87 +88,81 @@ class _OnboardingState extends State<Onboarding> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ?_currentPage>=1? InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
+                  _currentPage >= 1
+                      ? InkWell(
+                    onTap: _onBack,
                     child: Container(
                       decoration: BoxDecoration(
                         color: theme.primaryColorLight,
-                        border: Border.all(
-                          color: theme.dividerColor,
-                        ),
+                        border: Border.all(color: theme.dividerColor),
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: const [
-                          BoxShadow(
-                            color: AppColors.shadow,
-                          ),
+                          BoxShadow(color: AppColors.shadow),
                         ],
                       ),
                       padding: const EdgeInsets.all(8),
-                      child:
-                          Row(
-                            children: [
-                              SizedBox(width: 4,),
-                              Icon(
-                                Icons.arrow_back_ios,
-                                size: 16,
-                                color: provider.themeMode == ThemeMode.light
-                                    ? AppColors.lightPrimaryColor
-                                    : AppColors.white,
-                              ),
-                            ],
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_back_ios,
+                            size: 16,
+                            color: accentColor,
                           ),
-                    ),
-                  ):SizedBox(width: 38,),
-                   Center(
-                      child: Hero(
-                          tag: "logo",
-                          child: Image.asset(
-                            "assets/images/logo/evently.png",
-                            width: 142,
-                            color: theme.primaryColor,
-                          ),
-          
+                        ],
                       ),
                     ),
-                  ?_isLast?SizedBox(width:55,) :InkWell(
+                  )
+                      : const SizedBox(width: 38),
+                  Center(
+                    child: Hero(
+                      tag: "logo",
+                      child: Image.asset(
+                        "assets/images/logo/evently.png",
+                        width: 142,
+                        color: theme.primaryColor,
+                      ),
+                    ),
+                  ),
+                  _isLast
+                      ? const SizedBox(width: 55)
+                      : InkWell(
                     onTap: () {
-                       pageController.jumpToPage(screenDetails.length-1);
+                      pageController.jumpToPage(_pagesCount - 1);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         color: theme.primaryColorLight,
-                        border: Border.all(
-                          color: theme.dividerColor,
-                        ),
+                        border: Border.all(color: theme.dividerColor),
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: const [
-                          BoxShadow(
-                            color: AppColors.shadow,
-                          ),
+                          BoxShadow(color: AppColors.shadow),
                         ],
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 6,
+                      ),
                       child: Center(
-                        child: Text("Skip",style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                            color: provider.themeMode == ThemeMode.light
-                                ? AppColors.lightPrimaryColor
-                                : AppColors.white,
-                          fontSize: 14
-                        )),
-                      )
+                        child: Text(
+                          locale.skip,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            color: accentColor,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              Container(
-                height: 650,
+              SizedBox(
+                height: screenHeight * 0.78,
                 child: PageView.builder(
-                  itemCount: screenDetails.length,
+                  itemCount: _pagesCount,
                   controller: pageController,
-                  onPageChanged: (index){
+                  onPageChanged: (index) {
                     setState(() => _currentPage = index);
                   },
                   itemBuilder: (BuildContext context, int index) {
@@ -162,56 +171,54 @@ class _OnboardingState extends State<Onboarding> {
                       children: [
                         Center(
                           child: Image.asset(
-                            screenDetails[index]["image"],
-                            height: MediaQuery.of(context).size.height/2.5,
+                            screenDetails[index]["image"]!,
+                            height: screenHeight / 2.5,
                             color: theme.primaryColorDark,
                           ),
                         ),
                         Center(
                           child: DotsIndicator(
                             position: _currentPage.toDouble(),
-                            onTap: (index) {
+                            onTap: (i) {
                               pageController.animateToPage(
-                                index,
+                                i,
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.ease,
                               );
                             },
-                            dotsCount: screenDetails.length,
+                            dotsCount: _pagesCount,
                             decorator: DotsDecorator(
-          
                               activeColor: theme.primaryColor,
-                              size: Size(8,8),
-                              activeSize: Size(20,8),
+                              size: const Size(8, 8),
+                              activeSize: const Size(20, 8),
                               activeShape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(36),
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 16,),
+                        const SizedBox(height: 16),
                         Text(
-                          screenDetails[index]["title"],
+                          screenDetails[index]["title"]!,
                           style: theme.textTheme.titleLarge,
                         ),
                         const SizedBox(height: 8),
-                        SizedBox(
-                          height: 150,
-                          child: Text(
-                            screenDetails[index]["desc"],
-                            style: theme.textTheme.bodySmall,
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Text(
+                              screenDetails[index]["desc"]!,
+                              style: theme.textTheme.bodySmall,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
-                          onPressed: () {
-                            _onNext();
-                          },
+                          onPressed: _onNext,
                           child: Center(
                             child: Padding(
                               padding: const EdgeInsets.all(9),
                               child: Text(
-                                _isLast ? "Get Started" : "Next",
+                                _isLast ? locale.getStarted : locale.next,
                                 style: theme.textTheme.bodyMedium,
                               ),
                             ),
@@ -220,9 +227,8 @@ class _OnboardingState extends State<Onboarding> {
                       ],
                     );
                   },
-          
                 ),
-              )
+              ),
             ],
           ),
         ),
